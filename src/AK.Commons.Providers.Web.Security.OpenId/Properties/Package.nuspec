@@ -1,0 +1,24 @@
+﻿<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>AK.Commons.Providers.Web.Security.OpenId</id>
+    <title>OpenId Web Security Provider for Aashish Koirala's Commons Library</title>
+    <version>0.1.0</version>
+    <authors>Aashish Koirala</authors>
+    <owners>Aashish Koirala</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <tags>ak.commons commons aashish koirala web security openid google</tags>
+    <description>
+      This is an implementation of the web authentication interfaces in my Commons Library (http://aashishkoirala.github.io/commons) that is based on DotNetOpenAuth (OpenId). Currently, the implementation is limited to Google.
+      For more detailed information and documentation, please visit the GitHub page at http://aashishkoirala.github.io/commons-providers. You can find more of my stuff by visiting my page at http://aashishkoirala.github.io.
+      The package is free to download and use. The source code is open and provided under the GPL license.
+    </description>
+    <copyright>Copyright © 2013 Aashish Koirala</copyright>
+    <projectUrl>http://aashishkoirala.github.io/commons-providers/</projectUrl>
+    <licenseUrl>http://www.gnu.org/licenses/gpl.html</licenseUrl>
+    <dependencies>
+      <dependency id="AK.Commons" version="0.1.1" />
+      <dependency id="DotNetOpenAuth.OpenId.RelyingParty" version="4.3.1.13153" />
+    </dependencies>
+  </metadata>
+</package>
