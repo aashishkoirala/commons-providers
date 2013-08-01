@@ -1,79 +1,126 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="chrome=1">
+        <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <meta name="description" content="Aashish Koirala Commons Library Provider Set">
+		<title>Provider Set | Commons Library | Aashish Koirala</title>
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" media="screen" />
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+		<script type="text/javascript" src="http://aashishkoirala.github.io/scripts/bootstrap.min.js"></script>
+		<!--[if lt IE 9]>
+		<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+	</head>
 
-  <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="Commons-providers : Aashish's Koirala's Commons Library: Provider Set" />
+	<body>
+		<div class="container">
+			<header>
+			    <div class="row">
+			        <div class="span4">
+			            <a href="http://aashishkoirala.github.io" style="text-decoration: none">
+			                <h2 class="muted" style="font-weight: normal" title="Aashish Koirala">aashish<b>koirala</b></h2>
+			            </a>
+			        </div>
+			        <div class="span8 pull-right" style="padding-top: 10px">
+			            <div class="pull-right">
+			                <a title="Aashish Koirala on GitHub" href="http://github.com/aashishkoirala"><img alt="Aashish Koirala on GitHub" src="http://aashishkoirala.github.io/images/github.png" width="32" height="32" style="width: 32px; height: 32px"/></a>
+			                <a title="Aashish Koirala on Twitter" href="http://twitter.com/aashishkoirala"><img alt="Aashish Koirala on Twitter" src="http://aashishkoirala.github.io/images/twitter.png" width="32" height="32" style="width: 32px; height: 32px"/></a>
+			                <a title="Aashish Koirala on LinkedIn" href="http://www.linkedin.com/in/aashishkoirala"><img alt="Aashish Koirala on LinkedIn" src="http://aashishkoirala.github.io/images/linkedin.png" width="32" height="32" style="width: 32px; height: 32px"/></a>
+							<a title="Go to My Blog" href="http://aashishkoirala.wordpress.com"><img alt="Go to My Blog" src="https://secure.gravatar.com/avatar/100f2280ecbf23438d15db61ad1e3ba0" width="32" height="32" style="width: 32px; height: 32px"/></a>
+			            </div>
+			        </div>
+			    </div>
+			</header>
 
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+		    <section id="main-content">
+		        <div class="well">
+		            <h3>Commons Library: Provider Set</h3>
+		            <ul>
+		                <li><a href="http://github.com/aashishkoirala/commons-providers">Go to GitHub Repository</a></li>
+		            </ul>
+		            <br/>
+		            This provider set compliments my <a href="http://aashishkoirala.github.io/commons">commons library</a> and includes certain implementations of interfaces in the commons library. These "providers" can be included and consumed by any application that uses the commons library via MEF and the commons library configuration mechanism.
 
-    <title>Commons-providers</title>
-  </head>
+		            You can get each individual provider as a NuGet package. To use a provider, simply install it and make sure that it is in the runtime MEF search path of your application (i.e. the same location as the entry or executing assembly, or the location defined by the configuration key <code>ak.commons.composition.modulesdirectories</code>).
+                    Beyond that, each provider may need certain configuration settings to be defined - those are outlined in the sections below.
+		        </div>
+				<div class="row">
+					<div class="tabbable span3">
+						<ul class="nav nav-pills nav-stacked">
+						  <li class="active"><a href="#flnh_dataaccess_tab" data-toggle="tab">Data Access: Fluent NHibernate</a></li>
+						  <li><a href="#bundling_ms_tab" data-toggle="tab">Web Bundling: Microsoft</a></li>
+						  <li><a href="#webauth_dnoa_tab" data-toggle="tab">Web SSO: DotNetOpenAuth</a></li>
+						</ul>
+					</div>
+					<div class="tab-content span9">
+						<div class="tab-pane active" id="flnh_dataaccess_tab">
+							<h5>Data Access: Fluent NHibernate</h5>
+						    The library is available in <a href="https://www.nuget.org/packages/AK.Commons.Providers.DataAccess.FluentNHibernate/">Nuget</a> as
+                            <b>AK.Commons.Providers.DataAccess.FluentNHibernate</b>.
+						    You can use the Package Manager Console in Visual Studio and run <code>Install-Package AK.Commons.Providers.DataAccess.FluentNHibernate</code>.<br/><br/>                            
+						    This uses Fluent NHibernate as the unit-of-work factory provider. To configure:<br/><br/>
+						    <blockquote><pre>
+&lt;setting name="ak.commons.dataaccess.uowfactory.<i>factoryName</i>.provider"
+ type="System.String" value="<b>FluentNHibernate</b>" /&gt;
+&lt;setting name="ak.commons.dataaccess.uowfactory.<i>factoryName</i>.connection.provider"
+ type="System.String" value="..." /&gt;
+&lt;setting name="ak.commons.dataaccess.uowfactory.<i>factoryName</i>.connection.driver_class"
+ type="System.String" value="..." /&gt;
+&lt;setting name="ak.commons.dataaccess.uowfactory.<i>factoryName</i>.connection.connection_string"
+ type="System.String" value="..." /&gt;
+... and other NHibernate settings ...</pre></blockquote>
+						    The following settings are currently supported:<br/>
+						    <ul>
+						        <li>connection.provider</li>
+						        <li>connection.driver_class</li>
+						        <li>connection.connection_string</li>
+						        <li>show_sql</li>
+						        <li>generate_statistics</li>
+						        <li>dialect</li>
+						        <li>current_session_context_class</li>
+						        <li>use_outer_join</li>
+						        <li>adonet.batch_size</li>
+						        <li>query.substitutions</li>     						        
+						    </ul>
+						</div>
+						<div class="tab-pane" id="bundling_ms_tab">
+							<h5>Web Bundling: Microsoft</h5>
+						    The library is available in <a href="https://www.nuget.org/packages/AK.Commons.Providers.Web.Bundling.Microsoft/">Nuget</a> as
+                            <b>AK.Commons.Providers.Web.Bundling.Microsoft</b>.
+						    You can use the Package Manager Console in Visual Studio and run <code>Install-Package AK.Commons.Providers.Web.Bundling.Microsoft</code>.<br/><br/>
+						    This uses Microsoft's bundling library for web resources bundling. Currently, only CSS and JavaScript bundling is supported. To use this
+						    provider for bundling, have the following line in your configuration:<br/><br/>
+                            <code>&lt;setting name="ak.commons.web.bundling.provider" type="System.String" value="Microsoft" /&gt;</code>
+						</div>
+						<div class="tab-pane" id="webauth_dnoa_tab">
+							<h5>Web SSO: DotNetOpenAuth (OpenId/Google)</h5>
+						    The library is available in <a href="https://www.nuget.org/packages/AK.Commons.Providers.Web.Security.OpenId/">Nuget</a> as
+                            <b>AK.Commons.Providers.Web.Security.OpenId</b>.
+						    You can use the Package Manager Console in Visual Studio and run <code>Install-Package AK.Commons.Providers.Web.Security.OpenId</code>.<br/><br/>
+						    This uses DotNetOpenAuth for OpenId based web SSO. Currently, only Google is supported as an identity provider. To use the Google provider,
+						    have the following line in your configuration:<br/><br/>
+						    <code>&lt;setting name="ak.commons.web.security.webauth.provider" type="System.String" value="Google" /&gt;</code><br/><br/>
+						    If, for some reason, you need to change the request URL for Google, you can set the configuration key <code>ak.commons.providers.web.security.openid.googleRequestUrl</code>
+                            to the value you want. By default, this is set to <code>https://www.google.com/accounts/o8/id</code>.
+						</div>
+					</div>
+				</div>
+		    </section>
+		</div>
 
-  <body>
+		<script type="text/javascript">
+			var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+			document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+		</script>
+		<script type="text/javascript">
+			try {
+			  var pageTracker = _gat._getTracker("aashishkoirala_commons_providers");
+			pageTracker._trackPageview();
+			} catch(err) {}
+		</script>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/aashishkoirala/commons-providers">View on GitHub</a>
-
-          <h1 id="project_title">Commons-providers</h1>
-          <h2 id="project_tagline">Aashish's Koirala's Commons Library: Provider Set</h2>
-
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/aashishkoirala/commons-providers/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/aashishkoirala/commons-providers/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
-    </div>
-
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
-
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
-
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
-
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
-
-<h3>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
-
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
-
-<h3>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
-
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
-
-<h3>
-<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
-
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
-
-<h3>
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
-
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
-      </section>
-    </div>
-
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">Commons-providers maintained by <a href="https://github.com/aashishkoirala">aashishkoirala</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
-      </footer>
-    </div>
-
-    
-
-  </body>
+	</body>
 </html>
