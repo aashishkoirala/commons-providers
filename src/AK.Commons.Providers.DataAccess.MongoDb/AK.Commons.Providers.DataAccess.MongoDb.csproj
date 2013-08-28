@@ -32,6 +32,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AK.Commons, Version=0.1.2.0, Culture=neutral, PublicKeyToken=d1b7d9c059e7c6be, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\AK.Commons.0.1.2\lib\net45\AK.Commons.dll</HintPath>
+    </Reference>
     <Reference Include="MongoDB.Bson">
       <HintPath>..\..\lib\mongocsharpdriver.1.8.2\lib\net35\MongoDB.Bson.dll</HintPath>
     </Reference>
@@ -40,7 +44,9 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -54,13 +60,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AK.Commons\AK.Commons.csproj">
-      <Project>{70898bad-df90-41b3-af9b-072b2f674eb6}</Project>
-      <Name>AK.Commons</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Properties\BuildAndPack.proj" />
+    <None Include="Properties\Package.nuspec" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

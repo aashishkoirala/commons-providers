@@ -5,6 +5,12 @@ This provider set compliments my [commons library](http://aashishkoirala.github.
 
 For more detailed information and documentation, please visit the GitHub page for this repository at [aashishkoirala.github.io/commons-providers](http://aashishkoirala.github.io/commons-providers). You can get each individual provider as a NuGet package [here](https://www.nuget.org/profiles/aashishkoirala/).
 
+###### Update (v0.1.1)
+This update consists of the following providers:
+
++ Data access provider based on MongoDB
++ Configuration store based on Windows Azure Blob Storage
++ Logging provider based on Windows Azure Table Storage
 
 ###### Initial Release (v0.1.0)
 This version consists of the following providers:
