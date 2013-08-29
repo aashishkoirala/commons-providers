@@ -51,8 +51,10 @@
 					<div class="tabbable span3">
 						<ul class="nav nav-pills nav-stacked">
 						  <li class="active"><a href="#flnh_dataaccess_tab" data-toggle="tab">Data Access: Fluent NHibernate</a></li>
+						  <li><a href="#mongo_dataaccess_tab" data-toggle="tab">Data Access: MongoDB</a></li>
 						  <li><a href="#bundling_ms_tab" data-toggle="tab">Web Bundling: Microsoft</a></li>
 						  <li><a href="#webauth_dnoa_tab" data-toggle="tab">Web SSO: DotNetOpenAuth</a></li>
+						  <li><a href="#azure_tab" data-toggle="tab">Windows Azure Providers</a></li>
 						</ul>
 					</div>
 					<div class="tab-content span9">
@@ -86,6 +88,38 @@
 						        <li>query.substitutions</li>     						        
 						    </ul>
 						</div>
+						<div class="tab-pane active" id="mongo_dataaccess_tab">
+							<h5>Data Access: MongoDB</h5>
+						    The library is available in <a href="https://www.nuget.org/packages/AK.Commons.Providers.DataAccess.MongoDb/">Nuget</a> as
+                            <b>AK.Commons.Providers.DataAccess.MongoDb</b>.
+						    You can use the Package Manager Console in Visual Studio and run <code>Install-Package AK.Commons.Providers.DataAccess.MongoDb</code>.<br/><br/>                            
+						    This uses MongoDB as the unit-of-work factory provider. To configure:<br/><br/>
+						    <blockquote><pre>
+&lt;setting name="ak.commons.dataaccess.uowfactory.<i>factoryName</i>.provider"
+ type="System.String" value="<b>MongoDB</b>" /&gt;
+&lt;setting name="ak.commons.dataaccess.uowfactory.<i>factoryName</i>.connectionstring"
+ type="System.String" value="..." /&gt;
+&lt;setting name="ak.commons.dataaccess.uowfactory.<i>factoryName</i>.database"
+ type="System.String" value="..." /&gt;</pre></blockquote>
+						</div>
+						<div class="tab-pane" id="azure_tab">
+							<h5>Windows Azure Providers</h5>
+						    The library is available in <a href="https://www.nuget.org/packages/AK.Commons.Providers.Azure/">Nuget</a> as
+                            <b>AK.Commons.Providers.Azure</b>.
+						    You can use the Package Manager Console in Visual Studio and run <code>Install-Package AK.Commons.Providers.Azure</code>.<br/><br/>
+						    This includes a logging provider based on Windows Azure Table Storage and a configuration store based on Windows Azure Blob Storage.<br/><br/>
+							To configure the Windows Azure Table Storage logging provider:<br/>
+							<blockquote><pre>
+&lt;setting name="ak.commons.providers.azure.logging.tablestorageloggingprovider.url" type="System.String" value="<i>storage url</i>" /&gt;
+&lt;setting name="ak.commons.providers.azure.logging.tablestorageloggingprovider.accountname" type="System.String" value="<i>azure account name</i>" /&gt;
+&lt;setting name="ak.commons.providers.azure.logging.tablestorageloggingprovider.accesskey" type="System.String" value="<i>azure access key</i>" /&gt;
+&lt;setting name="ak.commons.providers.azure.logging.tablestorageloggingprovider.tablename" type="System.String" value="<i>table name</i>" /&gt;
+&lt;setting name="ak.commons.providers.azure.logging.tablestorageloggingprovider.partitionkeypropertyname" type="System.String" value="<i>partition key property name</i>" /&gt;</pre></blockquote>
+							<br/>
+							The partition key property name can be one of: ApplicationName, TimeStamp, LogLevel, CallingMethod or Message.<br/><br/>
+							
+							The Blob Storage configuration store has similar properties.
+						</div>						
 						<div class="tab-pane" id="bundling_ms_tab">
 							<h5>Web Bundling: Microsoft</h5>
 						    The library is available in <a href="https://www.nuget.org/packages/AK.Commons.Providers.Web.Bundling.Microsoft/">Nuget</a> as
