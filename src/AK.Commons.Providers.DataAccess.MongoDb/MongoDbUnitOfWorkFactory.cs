@@ -27,6 +27,7 @@ using AK.Commons.DataAccess;
 using MongoDB.Driver;
 using System;
 using System.ComponentModel.Composition;
+using System.Configuration;
 using System.Diagnostics;
 
 #endregion
@@ -45,6 +46,7 @@ namespace AK.Commons.Providers.DataAccess.MongoDb
         private const string ConfigKeyConnectionString = "connectionstring";
         private const string ConfigKeyDatabase = "database";
         private const string ConfigKeyEntityKeyMapperType = "entitykeymappertype";
+        private const string ConfigKeyAppSettingKey = "appsettingkey";
 
         #endregion
 
@@ -64,10 +66,19 @@ namespace AK.Commons.Providers.DataAccess.MongoDb
             var configKeyConnectionString = name + "." + ConfigKeyConnectionString;
             var configKeyDatabase = name + "." + ConfigKeyDatabase;
             var configKeyEntityKeyMapperType = name + "." + ConfigKeyEntityKeyMapperType;
+            var configKeyAppSettingKey = name + "." + ConfigKeyAppSettingKey;
 
             var connectionString = config.Get<string>(configKeyConnectionString);
             var databaseName = config.Get<string>(configKeyDatabase);
             var entityKeyMapperTypeName = config.Get<string>(configKeyEntityKeyMapperType);
+            var appSettingsKey = config.Get(configKeyAppSettingKey, string.Empty);
+
+            if (!string.IsNullOrWhiteSpace(appSettingsKey))
+            {
+                connectionString = ConfigurationManager.AppSettings[appSettingsKey];
+                var url = new MongoUrl(connectionString);
+                databaseName = url.DatabaseName;
+            }
 
             this.client = new MongoClient(connectionString);
             this.server = this.client.GetServer();
