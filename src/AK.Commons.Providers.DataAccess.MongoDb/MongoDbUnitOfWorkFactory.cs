@@ -1,6 +1,6 @@
 ﻿/*******************************************************************************************************************************
  * AK.Commons.Providers.DataAccess.MongoDb.MongoDbUnitOfWorkFactory
- * Copyright © 2013 Aashish Koirala <http://aashishkoirala.github.io>
+ * Copyright © 2013-2014 Aashish Koirala <http://aashishkoirala.github.io>
  * 
  * This file is part of Aashish Koirala's Commons Library Provider Set (AKCLPS).
  *  
@@ -24,6 +24,10 @@
 using AK.Commons.Composition;
 using AK.Commons.Configuration;
 using AK.Commons.DataAccess;
+using MongoDB.Bson;
+using MongoDB.Bson.IO;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
 using System;
 using System.ComponentModel.Composition;
@@ -47,6 +51,7 @@ namespace AK.Commons.Providers.DataAccess.MongoDb
         private const string ConfigKeyDatabase = "database";
         private const string ConfigKeyEntityKeyMapperType = "entitykeymappertype";
         private const string ConfigKeyAppSettingKey = "appsettingkey";
+        private const string ConfigKeyEnumAsStringKey = "enumasstring";
 
         #endregion
 
@@ -67,11 +72,13 @@ namespace AK.Commons.Providers.DataAccess.MongoDb
             var configKeyDatabase = name + "." + ConfigKeyDatabase;
             var configKeyEntityKeyMapperType = name + "." + ConfigKeyEntityKeyMapperType;
             var configKeyAppSettingKey = name + "." + ConfigKeyAppSettingKey;
+            var configKeyEnumAsStringKey = name + "." + ConfigKeyEnumAsStringKey;
 
             var connectionString = config.Get<string>(configKeyConnectionString);
             var databaseName = config.Get<string>(configKeyDatabase);
             var entityKeyMapperTypeName = config.Get<string>(configKeyEntityKeyMapperType);
             var appSettingsKey = config.Get(configKeyAppSettingKey, string.Empty);
+            var enumAsString = config.Get(configKeyEnumAsStringKey, false);
 
             if (!string.IsNullOrWhiteSpace(appSettingsKey))
             {
@@ -90,6 +97,17 @@ namespace AK.Commons.Providers.DataAccess.MongoDb
             var entityKeyMapper = (IEntityKeyMapper) Activator.CreateInstance(entityKeyMapperType);
             this.entityKeyMap = new MongoDbEntityKeyMap();
             entityKeyMapper.Map(this.entityKeyMap);
+
+            if (!enumAsString) return;
+
+            var conventionPack = new ConventionPack();
+            conventionPack.AddMemberMapConvention("EnumAsString", x =>
+                {
+                    if (x.MemberType.IsEnum) x.SetSerializer(new EnumAsStringBsonSerializer());
+                    if (x.MemberType.IsArray && x.MemberType.GetElementType().IsEnum)
+                        x.SetSerializer(new EnumAsStringBsonSerializer());
+                });
+            ConventionRegistry.Register("EnumAsString", conventionPack, t => true);
         }
 
         public IUnitOfWork Create()
@@ -98,5 +116,31 @@ namespace AK.Commons.Providers.DataAccess.MongoDb
         }
 
         #endregion
+
+        private class EnumAsStringBsonSerializer : IBsonSerializer
+        {
+            public object Deserialize(BsonReader bsonReader, Type nominalType, IBsonSerializationOptions options)
+            {
+                return this.Deserialize(bsonReader, nominalType, nominalType, options);
+            }
+
+            public object Deserialize(
+                BsonReader bsonReader, Type nominalType, Type actualType, IBsonSerializationOptions options)
+            {
+                return bsonReader.CurrentBsonType == BsonType.String || bsonReader.CurrentBsonType == BsonType.Array
+                           ? Enum.Parse(nominalType, bsonReader.ReadString())
+                           : null;
+            }
+
+            public IBsonSerializationOptions GetDefaultSerializationOptions()
+            {
+                return null;
+            }
+
+            public void Serialize(BsonWriter bsonWriter, Type nominalType, object value, IBsonSerializationOptions options)
+            {
+                bsonWriter.WriteString(value.ToString());
+            }
+        }
     }
 }

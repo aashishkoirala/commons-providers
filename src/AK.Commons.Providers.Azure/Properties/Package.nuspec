@@ -3,7 +3,7 @@
   <metadata>
     <id>AK.Commons.Providers.Azure</id>
     <title>Azure Provider Set for Aashish Koirala's Commons Library</title>
-    <version>0.1.0</version>
+    <version>1.0.0</version>
     <authors>Aashish Koirala</authors>
     <owners>Aashish Koirala</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -14,13 +14,14 @@
       The package is free to download and use. The source code is open and provided under the GPL license.
     </description>
     <releaseNotes>
-      This release includes a Table Storage based logging provider and a Blob Storage based configuration store.
+      Changes to accomodate new version (1.0.0) of AK.Commons.
     </releaseNotes>
-    <copyright>Copyright © 2013 Aashish Koirala</copyright>
+    <copyright>Copyright © 2013-2014 Aashish Koirala</copyright>
     <projectUrl>http://aashishkoirala.github.io/commons-providers/</projectUrl>
     <licenseUrl>http://www.gnu.org/licenses/gpl.html</licenseUrl>
     <dependencies>
-      <dependency id="AK.Commons" version="0.1.2" />
+      <dependency id="AK.Commons" version="1.0.0" />
+      <dependency id="WindowsAzure.Storage" version="4.3.0" />
     </dependencies>
   </metadata>
 </package>

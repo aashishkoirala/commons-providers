@@ -1,6 +1,6 @@
 ﻿/*******************************************************************************************************************************
  * AK.Commons.Providers.Azure: AssemblyInfo
- * Copyright © 2013 Aashish Koirala <http://aashishkoirala.github.io>
+ * Copyright © 2013-2014 Aashish Koirala <http://aashishkoirala.github.io>
  * 
  * This file is part of Aashish Koirala's Commons Library Provider Set (AKCLPS).
  *  
@@ -31,9 +31,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("Retail")]
 [assembly: AssemblyCompany("Aashish Koirala")]
 [assembly: AssemblyProduct("Aashish Koirala's Commons Library")]
-[assembly: AssemblyCopyright("Copyright © Aashish Koirala, 2013")]
+[assembly: AssemblyCopyright("Copyright © Aashish Koirala, 2013-2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("25072289-e260-48c9-9db0-907ab75d6802")]
-[assembly: AssemblyVersion("0.1.0.0")]
-[assembly: AssemblyFileVersion("0.1.0.0")]
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]

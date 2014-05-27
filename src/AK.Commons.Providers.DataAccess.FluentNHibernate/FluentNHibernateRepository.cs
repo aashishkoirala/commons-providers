@@ -1,5 +1,5 @@
 ﻿/*******************************************************************************************************************************
- * AK.Commons.Providers.DataAccess.MongoDb: AssemblyInfo
+ * AK.Commons.Providers.DataAccess.FluentNHibernate.FluentNHibernateRepository
  * Copyright © 2013-2014 Aashish Koirala <http://aashishkoirala.github.io>
  * 
  * This file is part of Aashish Koirala's Commons Library Provider Set (AKCLPS).
@@ -21,19 +21,42 @@
 
 #region Namespace Imports
 
-using System.Reflection;
-using System.Runtime.InteropServices;
+using AK.Commons.DataAccess;
+using NHibernate;
+using NHibernate.Linq;
+using System.Linq;
 
 #endregion
 
-[assembly: AssemblyTitle("Aashish Koirala's Commons Library: MongoDB Data Access Provider")]
-[assembly: AssemblyDescription("Data access provider based on MongoDB")]
-[assembly: AssemblyConfiguration("Retail")]
-[assembly: AssemblyCompany("Aashish Koirala")]
-[assembly: AssemblyProduct("Aashish Koirala's Commons Library")]
-[assembly: AssemblyCopyright("Copyright © Aashish Koirala, 2013-2014")]
-[assembly: AssemblyTrademark("")]
-[assembly: ComVisible(false)]
-[assembly: Guid("cd2f1c0f-0529-4343-9610-d19b2ffb9c69")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+namespace AK.Commons.Providers.DataAccess.FluentNHibernate
+{
+    /// <summary>
+    /// IRepository implementation that encapsulates an NHibernate ISession object.
+    /// </summary>
+    /// <typeparam name="TEntity">Entity type.</typeparam>
+    /// <author>Aashish Koirala</author>
+    internal class FluentNHibernateRepository<TEntity> : IRepository<TEntity> where TEntity : class
+    {
+        private readonly ISession session;
+
+        public FluentNHibernateRepository(ISession session)
+        {
+            this.session = session;
+        }
+
+        public IQueryable<TEntity> Query
+        {
+            get { return this.session.Query<TEntity>(); }
+        }
+
+        public void Save(TEntity entity)
+        {
+            this.session.SaveOrUpdate(entity);
+        }
+
+        public void Delete(TEntity entity)
+        {
+            this.session.Delete(entity);
+        }
+    }
+}

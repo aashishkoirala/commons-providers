@@ -1,6 +1,6 @@
 ﻿/*******************************************************************************************************************************
  * AK.Commons.Providers.DataAccess.FluentNHibernate.FluentNHibernateUnitOfWork
- * Copyright © 2013 Aashish Koirala <http://aashishkoirala.github.io>
+ * Copyright © 2013-2014 Aashish Koirala <http://aashishkoirala.github.io>
  * 
  * This file is part of Aashish Koirala's Commons Library Provider Set (AKCLPS).
  *  
@@ -21,11 +21,9 @@
 
 #region Namespace Imports
 
-using System;
-using System.Linq;
 using AK.Commons.DataAccess;
 using NHibernate;
-using NHibernate.Linq;
+using System;
 
 #endregion
 
@@ -69,40 +67,19 @@ namespace AK.Commons.Providers.DataAccess.FluentNHibernate
 
         public bool IsValid { get; private set; }
 
-        public TEntity Get<TEntity, TKey>(TKey key)
+        public IRepository<T> Repository<T>() where T : class
         {
-            return this.session.Get<TEntity>(key);
+            return new FluentNHibernateRepository<T>(this.session);
         }
 
-        public IQueryable<TEntity> Query<TEntity>()
+        public T NextValueInSequence<T>(string sequenceContainerName, string sequenceName, T incrementBy)
         {
-            return this.session.Query<TEntity>();
-        }
-
-        public TResult Query<TEntity, TResult>(Func<IQueryable<TEntity>, TResult> queryBuilder)
-        {
-            return queryBuilder(this.Query<TEntity>());
-        }
-
-        public void Save<TEntity>(TEntity entity)
-        {
-            this.session.SaveOrUpdate(entity);
-        }
-
-        public void Delete<TEntity>(TEntity entity)
-        {
-            this.session.Delete(entity);
+            throw new NotSupportedException("This operation is not yet supported by this provider.");
         }
 
         public void Commit()
         {
             this.transaction.Commit();
-            this.IsValid = false;
-        }
-
-        public void Rollback()
-        {
-            this.transaction.Rollback();
             this.IsValid = false;
         }
     }

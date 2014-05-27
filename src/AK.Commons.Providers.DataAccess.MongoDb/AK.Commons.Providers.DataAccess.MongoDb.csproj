@@ -32,9 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AK.Commons, Version=0.1.2.0, Culture=neutral, PublicKeyToken=d1b7d9c059e7c6be, processorArchitecture=MSIL">
+    <Reference Include="AK.Commons, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d1b7d9c059e7c6be, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\AK.Commons.0.1.2\lib\net45\AK.Commons.dll</HintPath>
+      <HintPath>..\..\lib\AK.Commons.1.0.0\lib\net45\AK.Commons.dll</HintPath>
     </Reference>
     <Reference Include="MongoDB.Bson">
       <HintPath>..\..\lib\mongocsharpdriver.1.8.2\lib\net35\MongoDB.Bson.dll</HintPath>
@@ -54,6 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MongoDbRepository.cs" />
     <Compile Include="MongoDbEntityKeyMap.cs" />
     <Compile Include="MongoDbUnitOfWork.cs" />
     <Compile Include="MongoDbUnitOfWorkFactory.cs" />
