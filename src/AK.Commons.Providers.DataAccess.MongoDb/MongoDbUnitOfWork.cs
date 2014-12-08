@@ -1,6 +1,6 @@
 ﻿/*******************************************************************************************************************************
  * AK.Commons.Providers.DataAccess.MongoDb.MongoDbUnitOfWork
- * Copyright © 2013 Aashish Koirala <http://aashishkoirala.github.io>
+ * Copyright © 2013-2014 Aashish Koirala <http://aashishkoirala.github.io>
  * 
  * This file is part of Aashish Koirala's Commons Library Provider Set (AKCLPS).
  *  
@@ -21,11 +21,12 @@
 
 #region Namespace Imports
 
-using AK.Commons.DataAccess;
-using MongoDB.Driver;
-using MongoDB.Driver.Linq;
 using System;
 using System.Linq;
+using AK.Commons.DataAccess;
+using MongoDB.Bson;
+using MongoDB.Driver;
+using MongoDB.Driver.Builders;
 
 #endregion
 
@@ -64,83 +65,40 @@ namespace AK.Commons.Providers.DataAccess.MongoDb
             this.IsValid = false;
         }
 
-        public TEntity Get<TEntity, TKey>(TKey key)
+        public IRepository<T> Repository<T>() where T : class
         {
-            var query = MongoDB.Driver.Builders.Query<TEntity>.EQ(this.entityKeyMap.GetKeyExpression<TEntity, TKey>(), key);
-            return this.GetCollection<TEntity>().FindOne(query);
+            return new MongoDbRepository<T>(this.database, this.entityKeyMap);
         }
 
-        public IQueryable<TEntity> Query<TEntity>()
+        public T NextValueInSequence<T>(string sequenceContainerName, string sequenceName, T incrementBy)
         {
-            return this.GetCollection<TEntity>().AsQueryable();
+            var incrementByAsLong = (long) Convert.ChangeType(incrementBy, typeof (long));
+
+            if (!this.database.CollectionExists(sequenceContainerName))
+                this.database.CreateCollection(sequenceContainerName);
+
+            var collection = this.database.GetCollection(sequenceContainerName);
+
+            var result = collection.FindAndModify(
+                Query.EQ("Name", new BsonString(sequenceName)),
+                SortBy.Null,
+                Update.Inc("Value", incrementByAsLong),
+                false, true);
+
+            long value = 0;
+            var item = result.Response.Values.First();
+            if (item.IsBsonNull) return (T) Convert.ChangeType(value, typeof (T));
+
+            value = item["Value"].ToInt64();
+
+            return (T) Convert.ChangeType(value, typeof (T));
         }
 
-        public TResult Query<TEntity, TResult>(Func<IQueryable<TEntity>, TResult> queryBuilder)
+        public void Commit()
         {
-            return queryBuilder(this.Query<TEntity>());
+            this.IsValid = false;
         }
 
-        public void Save<TEntity>(TEntity entity)
-        {
-            this.GetCollection<TEntity>().Save(entity);
-        }
-
-        public void Delete<TEntity>(TEntity entity)
-        {
-            var query = this.GetMongoQueryForDelete(entity);
-            this.GetCollection<TEntity>().Remove(query);
-        }
-
-        public void Commit() {}
-
-        public void Rollback() {}
-
-        #endregion
-
-        #region Methods (Private)
-
-        private MongoCollection<TEntity> GetCollection<TEntity>()
-        {
-            var collectionName = typeof (TEntity).Name;
-
-            if (!this.database.CollectionExists(collectionName))
-                this.database.CreateCollection(collectionName);
-
-            return this.database.GetCollection<TEntity>(collectionName);
-        }
-
-        private IMongoQuery GetMongoQueryForDelete<TEntity>(TEntity entity)
-        {
-            var keyType = this.entityKeyMap.GetKeyType<TEntity>();
-            IMongoQuery query = null;
-            if (keyType == typeof(int))
-            {
-                var idExpression = this.entityKeyMap.GetKeyExpression<TEntity, int>();
-                var key = idExpression.Compile()(entity);
-                query = MongoDB.Driver.Builders.Query<TEntity>.EQ(idExpression, key);
-            }
-            else if(keyType == typeof(long))
-            {
-                var idExpression = this.entityKeyMap.GetKeyExpression<TEntity, long>();
-                var key = idExpression.Compile()(entity);
-                query = MongoDB.Driver.Builders.Query<TEntity>.EQ(idExpression, key);                
-            }
-            else if (keyType == typeof(Guid))
-            {
-                var idExpression = this.entityKeyMap.GetKeyExpression<TEntity, Guid>();
-                var key = idExpression.Compile()(entity);
-                query = MongoDB.Driver.Builders.Query<TEntity>.EQ(idExpression, key);
-            }
-            else if (keyType == typeof(string))
-            {
-                var idExpression = this.entityKeyMap.GetKeyExpression<TEntity, string>();
-                var key = idExpression.Compile()(entity);
-                query = MongoDB.Driver.Builders.Query<TEntity>.EQ(idExpression, key);
-            }
-
-            return query;
-        }
-
-        #endregion
+        #endregion        
     }
 }

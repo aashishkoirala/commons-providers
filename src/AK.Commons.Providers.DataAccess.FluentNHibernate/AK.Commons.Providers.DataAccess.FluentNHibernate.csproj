@@ -32,8 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AK.Commons">
-      <HintPath>..\..\lib\AK.Commons.0.1.1\lib\net45\AK.Commons.dll</HintPath>
+    <Reference Include="AK.Commons, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d1b7d9c059e7c6be, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\AK.Commons.1.0.0\lib\net45\AK.Commons.dll</HintPath>
     </Reference>
     <Reference Include="FluentNHibernate">
       <HintPath>..\..\lib\FluentNHibernate.1.3.0.733\lib\FluentNHibernate.dll</HintPath>
@@ -48,6 +49,7 @@
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -55,6 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FluentNHibernateRepository.cs" />
     <Compile Include="FluentNHibernateUnitOfWork.cs" />
     <Compile Include="FluentNHibernateUnitOfWorkFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

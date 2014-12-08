@@ -5,6 +5,12 @@ This provider set compliments my [commons library](http://aashishkoirala.github.
 
 For more detailed information and documentation, please visit the GitHub page for this repository at [aashishkoirala.github.io/commons-providers](http://aashishkoirala.github.io/commons-providers). You can get each individual provider as a NuGet package [here](https://www.nuget.org/profiles/aashishkoirala/).
 
+###### Update (v1.0.0)
+This update consists of:
+
++ Changes to all providers to fit the new version (1.0.0) of the Commons Library.
++ Removed the web bundling and web SSO providers as they are now defunct in preparation for a new dedicated Commons Web Library. 
+
 ###### Update (v0.1.1)
 This update consists of the following providers:
 
