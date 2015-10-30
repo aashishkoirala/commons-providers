@@ -76,8 +76,9 @@ namespace AK.Commons.Providers.DataAccess.MongoDb
         {
             var collectionName = typeof (T).Name;
 
-            if (!this.database.CollectionExists(collectionName))
-                this.database.CreateCollection(collectionName);
+            
+            /*if (!this.database.CollectionExists(collectionName))
+                this.database.CreateCollection(collectionName);*/
 
             return this.database.GetCollection<T>(collectionName);
         }

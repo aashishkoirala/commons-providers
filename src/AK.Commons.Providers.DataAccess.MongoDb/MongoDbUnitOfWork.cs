@@ -21,12 +21,12 @@
 
 #region Namespace Imports
 
-using System;
-using System.Linq;
 using AK.Commons.DataAccess;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
+using System;
+using System.Linq;
 
 #endregion
 
@@ -79,11 +79,15 @@ namespace AK.Commons.Providers.DataAccess.MongoDb
 
             var collection = this.database.GetCollection(sequenceContainerName);
 
+#pragma warning disable 612,618
+
             var result = collection.FindAndModify(
                 Query.EQ("Name", new BsonString(sequenceName)),
                 SortBy.Null,
                 Update.Inc("Value", incrementByAsLong),
                 false, true);
+
+#pragma warning restore 612,618
 
             long value = 0;
             var item = result.Response.Values.First();

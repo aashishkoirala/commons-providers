@@ -25,7 +25,6 @@ using AK.Commons.Composition;
 using AK.Commons.Configuration;
 using AK.Commons.DataAccess;
 using MongoDB.Bson;
-using MongoDB.Bson.IO;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
@@ -42,7 +41,7 @@ namespace AK.Commons.Providers.DataAccess.MongoDb
     /// Unit-of-work factory based on MongoDB.
     /// </summary>
     /// <author>Aashish Koirala</author>
-    [Export(typeof(IUnitOfWorkFactory)), PartCreationPolicy(CreationPolicy.Shared), ProviderMetadata("MongoDb")]
+    [Export(typeof (IUnitOfWorkFactory)), PartCreationPolicy(CreationPolicy.Shared), ProviderMetadata("MongoDb")]
     public class MongoDbUnitOfWorkFactory : IUnitOfWorkFactory
     {
         #region Constants
@@ -88,7 +87,11 @@ namespace AK.Commons.Providers.DataAccess.MongoDb
             }
 
             this.client = new MongoClient(connectionString);
+
+#pragma warning disable 612,618
             this.server = this.client.GetServer();
+#pragma warning restore 612,618
+            
             this.database = this.server.GetDatabase(databaseName);
 
             var entityKeyMapperType = Type.GetType(entityKeyMapperTypeName);
@@ -103,9 +106,9 @@ namespace AK.Commons.Providers.DataAccess.MongoDb
             var conventionPack = new ConventionPack();
             conventionPack.AddMemberMapConvention("EnumAsString", x =>
                 {
-                    if (x.MemberType.IsEnum) x.SetSerializer(new EnumAsStringBsonSerializer());
+                    if (x.MemberType.IsEnum) x.SetSerializer(new EnumAsStringBsonSerializer(x.MemberType));
                     if (x.MemberType.IsArray && x.MemberType.GetElementType().IsEnum)
-                        x.SetSerializer(new EnumAsStringBsonSerializer());
+                        x.SetSerializer(new EnumAsStringBsonSerializer(x.MemberType));
                 });
             ConventionRegistry.Register("EnumAsString", conventionPack, t => true);
         }
@@ -119,28 +122,26 @@ namespace AK.Commons.Providers.DataAccess.MongoDb
 
         private class EnumAsStringBsonSerializer : IBsonSerializer
         {
-            public object Deserialize(BsonReader bsonReader, Type nominalType, IBsonSerializationOptions options)
+            public EnumAsStringBsonSerializer(Type valueType)
             {
-                return this.Deserialize(bsonReader, nominalType, nominalType, options);
+                this.ValueType = valueType;
             }
 
-            public object Deserialize(
-                BsonReader bsonReader, Type nominalType, Type actualType, IBsonSerializationOptions options)
+            public object Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
             {
-                return bsonReader.CurrentBsonType == BsonType.String || bsonReader.CurrentBsonType == BsonType.Array
-                           ? Enum.Parse(nominalType, bsonReader.ReadString())
+                var currentBsonType = context.Reader.CurrentBsonType;
+
+                return currentBsonType == BsonType.String || currentBsonType == BsonType.Array
+                           ? Enum.Parse(args.NominalType, context.Reader.ReadString())
                            : null;
             }
 
-            public IBsonSerializationOptions GetDefaultSerializationOptions()
+            public void Serialize(BsonSerializationContext context, BsonSerializationArgs args, object value)
             {
-                return null;
+                context.Writer.WriteString(value.ToString());
             }
 
-            public void Serialize(BsonWriter bsonWriter, Type nominalType, object value, IBsonSerializationOptions options)
-            {
-                bsonWriter.WriteString(value.ToString());
-            }
+            public Type ValueType { get; private set; }
         }
     }
 }
